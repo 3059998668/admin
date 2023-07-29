@@ -1,0 +1,19 @@
+.layui-col-md3 {
+    padding: 5px;
+    cursor: pointer !important;
+}
+
+.shop_img {
+    width: 92%;
+    height: 220px;
+    padding: 10px 4%;
+}
+
+.shop_name {
+    padding-left: 10px;
+}
+
+.shop_money {
+    font-size: 18px;
+    padding-left: 10px;
+}

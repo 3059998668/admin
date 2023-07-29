@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/user/user_index.css">
+    <style>
+        #demo-laypage-theme-1 {
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">卡片面板</div>
+            <div class="layui-card-body">
+
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <div class="layui-row" id="index_vip">
+                            <!-- <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg2 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg3 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg3 layui-bg-red">内部列</div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="demo-laypage-theme-1"></div>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/jquery.js"></script>
+    <script src="/js/jk.js"></script>
+    <script>
+        var a = document.querySelector('.layui-row')
+        var laypage = layui.laypage;
+        // 自定义主题s
+        laypage.render({
+            elem: 'demo-laypage-theme-1',
+            count: 10,
+            theme: '#1E9FFF'
+        });
+        // 获取到商品渲染到页面上
+        function GetShopping() {
+            $.ajax({
+                type: 'GET',
+                url: 'v1/GetMoneyList',
+                data: {
+
+                },
+                success: function(res) {
+                    console.log(res.data)
+                        // 获取成功渲染数据
+                    for (var i = 0; i < res.data.length; i++) {
+                        console.log(i) //拿到所有的列表商品的索引
+                        console.log(res.data[i].shopname)
+                            // 渲染对应的html数量
+                        $('#index_vip').append('<a href="/user/user_goshopping.html"><div class="layui-col-md3"><div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + res.data[i].shopname + '</h2><span class="shop_money">' + res.data[i].paymoney + "元" + '</span><i class="shop_inventory">' + "库存：" + res.data[i].inventory + '</i></div></div></a>')
+                            // $('.shop_name').text(res.data[i].shopname)
+                    }
+                    // $.each(res.data, function(i, val) {
+                    //     console.log(i, val)
+                    //     $('#index_vip').add('<div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + val.shopname + '</h2><span class="shop_money">价格</span><i class="shop_inventory">库存</i></div>')
+                    //         // $('.layui-row').append('<div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + val.shopname + '</h2><span class="shop_money">价格</span><i class="shop_inventory">库存</i></div>')
+                    // })
+
+                }
+            })
+        }
+        GetShopping()
+    </script>
+</body>
+
+</html>
