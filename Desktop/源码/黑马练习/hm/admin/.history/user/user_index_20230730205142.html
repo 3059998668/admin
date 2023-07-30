@@ -88,6 +88,47 @@
         var page = 1;
         var limit = 10
 
+
+        // 封装ajax请求函数
+        function Ajax(type, url, data, callback) {
+            $.ajax({
+                type: 'GET',
+                url: 'v1/GetMoneyList',
+                data: {
+                    page: page,
+                    limit: limit
+                },
+                success: function(res) {
+                    console.log(res, res.msg) //msg是总的商品个数
+                    console.log(res.data)
+                        // 把拿到的数据存到本地存储里
+                    localStorage.setItem('getshopping', JSON.stringify(res.msg)) //把总的数据存到本地存储里
+                        // 获取成功渲染数据
+                        // for (var i = 0; i < res.data.length; i++) {
+                        //     console.log(i) //拿到所有的列表商品的索引
+                        //     console.log(res.data[i].shopname)
+
+                    //     // 渲染对应的html数量
+                    //     $('#index_vip').append('<a href="/user/user_goshopping.html"><div class="layui-col-md3"><div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + res.data[i].shopname + '</h2><span class="shop_money">' + res.data[i].paymoney + "元" + '</span><i class="shop_inventory">' + "库存：" + res.data[i].inventory + '</i></div></div></a>')
+                    //         // $('.shop_name').text(res.data[i].shopname)
+                    //         // page++;
+                    //         // GetShopping()
+                    // }
+
+                    // $.each(res.data, function(i, val) {
+                    //     console.log(i, val)
+                    //     $('#index_vip').add('<div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + val.shopname + '</h2><span class="shop_money">价格</span><i class="shop_inventory">库存</i></div>')
+                    //         // $('.layui-row').append('<div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "/images/aaa.jpg"alt = "" ><h2 class="shop_name">' + val.shopname + '</h2><span class="shop_money">价格</span><i class="shop_inventory">库存</i></div>')
+                    // })
+
+
+                }
+
+            })
+        }
+
+
+
         // 获取到商品渲染到页面上
         function GetShopping() {
             $.ajax({

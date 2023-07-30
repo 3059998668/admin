@@ -88,6 +88,31 @@
         var page = 1;
         var limit = 10
 
+
+        // 封装ajax请求函数
+        function CallAjax(type, url, data, callback) {
+            $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                success: function(res) {
+                    // console.log(res, res.msg) //msg是总的商品个数
+                    // console.log(res.data)
+                    callback
+
+                }
+
+            })
+        }
+        CallAjax('GET', 'v1/GetFenList', {
+            page: 1,
+            limit: 10
+        }, function() {
+            console.log(res)
+        })
+
+
+
         // 获取到商品渲染到页面上
         function GetShopping() {
             $.ajax({
