@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/user/user_index.css">
+    <style>
+        #demo-laypage-theme-1 {
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">卡片面板</div>
+            <div class="layui-card-body">
+
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <div class="layui-row" id="index_vip">
+                            <!-- <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                                    <img class="shop_img" src="/images/aaa.jpg" alt="">
+                                    <h2 class="shop_name">标题</h2>
+                                    <span class="shop_money">价格</span>
+                                    <i class="shop_inventory">库存</i>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg1 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg2 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg3 layui-bg-red">内部列</div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="grid-demo grid-demo-bg3 layui-bg-red">内部列</div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="demo-laypage-theme-1"></div>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/jquery.js"></script>
+    <script src="/js/jk.js"></script>
+    <script src="/lib/template/template-web.js"></script>
+    <script src="/js/CallAjax.js"></script>
+    <script type="text/html" id="tem">
+        {{each data}}
+        <div data-id='{{$value.id}}' class="layui-col-md3" id="shop_btn">
+            <div class="grid-demo grid-demo-bg1 layui-bg-red">
+                <img class="shop_img" src="{{$value.shopimg}}" alt="">
+                <h2 class="shop_name">{{$value.shopname}}</h2>
+                <span class="shop_money">{{$value.paymoney}}元</span>
+                <i class="shop_inventory">库存：{{$value.inventory}}</i>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+    <script>
+        var a = document.querySelector('.layui-row')
+        var laypage = layui.laypage;
+        var page = 1;
+        var limit = 10
+        var layer = layui.layer
+
+        // 获取到商品渲染到页面上
+        function GetShopping() {
+            CallAjax({
+                    type: 'GET',
+                    url: 'v1/GetMoneyList',
+                    data: {
+                        page: page, //第一次让页数默认为第一页数
+                        limit: limit
+                    }
+                }).then((value) => {
+                    var Text = template('tem', value) //第一个参数是ID，不用加#号，第二个参数是数据
+                    $('#index_vip').html(Text)
+                        // 成功回调
+                    console.log(value, value.msg)
+                    laypage.render({
+                        elem: 'demo-laypage-theme-1',
+                        count: value.msg, //总的数据条数,获取到的是字符串的类型，需要转成number类型
+                        theme: '#1E9FFF',
+                        jump: function(obj, first) {
+                            console.log(obj)
+                            console.log(obj.curr); // 得到当前页，以便向服务端请求对应页的数据。
+                            console.log(obj.limit); // 得到每页显示的条数
+                            // $.ajax({
+                            //     type: 'GET',
+                            //     url: 'v1/GetMoneyList',
+                            //     data: {
+                            //         page: obj.curr,
+                            //         limit: obj.limit
+                            //     },
+                            //     success: function(res) {
+                            //         console.log(res, res.msg) //msg是总的商品个数
+                            //         console.log(res.data)
+                            //             // 获取成功渲染数据
+                            //         for (var i = 0; i < res.data.length; i++) {
+                            //             console.log(i) //拿到所有的列表商品的索引
+                            //             console.log(res.data[i].shopname)
+                            //                 // 渲染对应的html数量
+                            //             var append = $('#index_vip').append('<a data-id=' + res.data[i].id + ' href=""><div class="layui-col-md3"><div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "' + res.data[i].shopimg + '"alt = "" ><h2 class="shop_name">' + res.data[i].shopname + '</h2><span class="shop_money">' + res.data[i].paymoney + "元" + '</span><i class="shop_inventory">' + "库存：" + res.data[i].inventory + '</i></div></div></a>')
+                            //                 // $('.shop_name').text(res.data[i].shopname)
+                            //                 // page++;
+                            //                 // GetShopping()
+                            //         }
+
+                            //     }
+                            // })
+
+                            // 首次不执行
+                            if (!first) {
+                                // do something
+                                console.log('aaa')
+                                    // $('#index_vip').empty() //每次点击都会清除 $('#index_vip') 下面的所有元素
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'v1/GetMoneyList',
+                                    data: {
+                                        page: obj.curr,
+                                        limit: obj.limit
+                                    },
+                                    success: function(res) {
+                                        console.log(res, res.msg) //msg是总的商品个数
+                                        console.log(res.data)
+                                            // 获取成功渲染数据
+                                            // for (var i = 0; i < res.data.length; i++) {
+                                            //     console.log(i) //拿到所有的列表商品的索引
+                                            //     console.log(res.data[i].shopname)
+
+                                        // 渲染对应的html数量
+                                        var Text = template('tem', res) //第一个参数是ID，不用加#号，第二个参数是数据
+                                        $('#index_vip').html(Text)
+                                            // var append = $('#index_vip').append('<a data-id=' + res.data[i].id + ' href=""><div class="layui-col-md3"><div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "' + res.data[i].shopimg + '"alt = "" ><h2 class="shop_name">' + res.data[i].shopname + '</h2><span class="shop_money">' + res.data[i].paymoney + "元" + '</span><i class="shop_inventory">' + "库存：" + res.data[i].inventory + '</i></div></div></a>')
+                                            // $('.shop_name').text(res.data[i].shopname)
+                                            // page++;
+                                            // GetShopping()
+                                            // }
+
+                                    }
+                                })
+                            }
+                        }
+                    });
+
+                }, (reason) => {
+                    // 失败回调
+                    console.log(reason)
+                })
+                // $.ajax({
+                //     type: 'GET',
+                //     url: 'v1/GetMoneyList',
+                //     data: {
+                //         page: page,
+                //         limit: limit
+                //     },
+                //     success: function(res) {
+                //         console.log(res, res.msg) //msg是总的商品个数
+                //         console.log(res.data)
+                //             // 把拿到的数据存到本地存储里
+                //         localStorage.setItem('getshopping', JSON.stringify(res.msg)) //把总的数据存到本地存储里
+                //     }
+
+            // })
+
+        }
+        GetShopping()
+            // var shopnumber = parseInt(localStorage.getItem('getshopping'))
+            // console.log(typeof shopnumber)
+            //     // 自定义主题
+            // laypage.render({
+            //     elem: 'demo-laypage-theme-1',
+            //     count: shopnumber, //总的数据条数,获取到的是字符串的类型，需要转成number类型
+            //     theme: '#1E9FFF',
+            //     jump: function(obj, first) {
+            //         console.log(obj)
+            //         console.log(obj.curr); // 得到当前页，以便向服务端请求对应页的数据。
+            //         console.log(obj.limit); // 得到每页显示的条数
+            //         $.ajax({
+            //             type: 'GET',
+            //             url: 'v1/GetMoneyList',
+            //             data: {
+            //                 page: obj.curr,
+            //                 limit: obj.limit
+            //             },
+            //             success: function(res) {
+            //                 console.log(res, res.msg) //msg是总的商品个数
+            //                 console.log(res.data)
+            //                     // 获取成功渲染数据
+            //                 for (var i = 0; i < res.data.length; i++) {
+            //                     console.log(i) //拿到所有的列表商品的索引
+            //                     console.log(res.data[i].shopname)
+            //                         // 渲染对应的html数量
+            //                     var append = $('#index_vip').append('<a data-id=' + res.data[i].id + ' href=""><div class="layui-col-md3"><div class="grid-demo grid-demo-bg1 layui-bg-red"><img class = "shop_img"src = "' + res.data[i].shopimg + '"alt = "" ><h2 class="shop_name">' + res.data[i].shopname + '</h2><span class="shop_money">' + res.data[i].paymoney + "元" + '</span><i class="shop_inventory">' + "库存：" + res.data[i].inventory + '</i></div></div></a>')
+            //                         // $('.shop_name').text(res.data[i].shopname)
+            //                         // page++;
+            //                         // GetShopping()
+            //                 }
+
+        //             }
+        //         })
+
+        //         // 首次不执行
+        //         if (!first) {
+        //             // do something
+        //             console.log('aaa')
+        //             $('#index_vip').empty() //每次点击都会清除 $('#index_vip') 下面的所有元素
+        //         }
+        //     }
+        // });
+
+
+        // 点击事件
+        // 通过代理事件，绑定渲染的点击按钮
+        $('#index_vip').on('click', 'a', function(e) {
+            e.preventDefault();
+            console.log($(this).attr('data-id')) //得到当前点击的id
+                // 获取到信息，渲染到页面上
+                // 发起ajax请求
+            CallAjax('GET', 'v1/GetShop', {
+                // 传入data 参数
+                id: String($(this).attr('data-id'))
+            }, function(res) {
+                console.log(res)
+                    // 判断，查询成功则跳转页面
+                if (res.code === 200 && res.msg == '查询成功') {
+                    // 成功,跳转页面
+                    window.location = '/user/user_goshopping.html'
+                    localStorage.setItem('shopping', JSON.stringify(res.data)) //获取到的信息存到本地存储里
+
+                } else {
+                    layer.msg('查询失败')
+                }
+            })
+        })
+    </script>
+
+
+</body>
+
+</html>
